@@ -14,7 +14,7 @@ public class Writing {
         var CD_PrintStream = ClassDesc.of("java.io.PrintStream");
         var MTD_void_void = MethodTypeDesc.of(ConstantDescs.CD_void);
         var MTD_void_String = MethodTypeDesc.of(ConstantDescs.CD_void, CD_String);
-        //var MTD_void_void = MethodTypeDesc.ofDescriptor("()V");
+        var public_static = ClassFile.ACC_PUBLIC + ClassFile.ACC_STATIC;
 
         byte[] bytes = ClassFile.of().build(CD_Hello,
             clb -> clb
@@ -25,13 +25,15 @@ public class Writing {
                                 mb -> mb.withCode(
                                         cob -> cob.aload(0)
                                                   .invokespecial(ConstantDescs.CD_Object,
-                                                                 ConstantDescs.INIT_NAME, ConstantDescs.MTD_void)
+                                                                 ConstantDescs.INIT_NAME, 
+                                                                 ConstantDescs.MTD_void)
                                                   .return_()))
-                    .withMethod("main", MTD_void_void, ClassFile.ACC_PUBLIC + ClassFile.ACC_STATIC,
+                    .withMethod("main", MTD_void_void, public_static,
                                 mb -> mb.withCode(
                                         cob -> cob.getstatic(CD_System, "out", CD_PrintStream)
                                                     .ldc("Hello World")
-                                                    .invokevirtual(CD_PrintStream, "println", MTD_void_String)
+                                                    .invokevirtual(CD_PrintStream, 
+                                                        "println", MTD_void_String)
                                                     .return_())));
         return bytes;
     }
